@@ -1,0 +1,55 @@
+.alert-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99999;
+    text-align: center;
+    padding: 17px;
+}
+.datepicker {
+    z-index: 1110!important;
+}
+.group-datatables{
+    background-color: #eee;
+}
+
+/* login */
+.bg-silver-300 {
+    background-image: url(../img/bg.jpg);    
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+hr.line {
+    background-color: #fff;
+	border-top: 2px dashed #23b7e5;
+}
+
+/* dataTable */
+table.dataTable {    
+    border-collapse: collapse!important;
+}
+.table thead.thead-lg th {
+    padding: 16px 10.5px;
+}
+.small-text {
+    font-size: 13px;
+}
+
+/* employee */
+.profile-picture {
+    height: 136px;
+    border: 2px dashed #ddd;
+    padding: 2px;
+}
+.profile-picture-list {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.header .dropdown-user a.dropdown-toggle img{
+    height: 30px;
+}
+
+/* fixed v-select */
