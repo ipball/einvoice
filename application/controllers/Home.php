@@ -6,8 +6,7 @@ class Home extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Invoice_model');		
-		$this->load->model('Employee_model');
+		$this->load->model('Invoice_model');
 		$this->sess = $this->session->userdata(app_session());
 	}
 

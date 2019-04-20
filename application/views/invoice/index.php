@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="ibox-head">
                 <div class="ibox-title">รายการใบแจ้งหนี้ (Invoice)</div>
                 <div>                    
-                    <a class="btn btn-info btn-sm" href="<?php echo base_url('invoice/create'); ?>" role="button">สร้างใบแจ้งหนี้</a>
+                    <a class="btn btn-info btn-sm" href="<?=base_url('invoice/create')?>" role="button">สร้างใบแจ้งหนี้</a>
                 </div>
             </div>
             <div class="ibox-body">
