@@ -50,6 +50,38 @@ $(function () {
                 },
             },
             {
+                targets: 1,                
+                render: function (data, type, row) {
+                    var sku = '<br/><span class="text-info small-text"><strong>รหัสสินค้า</strong> ' + row.sku + '</span>';
+                    var barcode = (row.sex != '') ? '<br/><span class="text-info small-text"><strong>บาร์โค๊ด</strong> ' + row.barcode + '</span>' : '';
+                    return data + sku + barcode;
+                },
+            },
+            {
+                targets: 2,                
+                render: function (data, type, row) {
+                    var buy_price = '<span class="text-black-50 small-text"><strong>ราคาซื้อ</strong> ' + row.buy_price + '</span>';
+                    var sell_price = '<br/><span class="text-black-50 small-text"><strong>ราคาขาย</strong> ' + row.sell_price + '</span>';
+                    return buy_price + sell_price;
+                },
+            },
+            {
+                targets: 3,                
+                render: function (data, type, row) {
+                    var result = '';
+
+                    if(data == 1){
+                        result = 'สินค้านับสต็อก';
+                    } else if (data == 2) {
+                        result = 'สินค้าไม่นับสต็อก';
+                    } else if (data == 3) {
+                        result = 'สินค้าบริการ';
+                    }
+
+                    return result;
+                },
+            },
+            {
                 targets: 6,
                 orderable: false,
                 render: function (data, type, row) {
@@ -62,7 +94,7 @@ $(function () {
                 render: function (data, type, row) {
                     return '<div class="btn-group m-b-10">' +
                         '<button class="btn btn-outline-warning btn-sm btn-modal" data-href="' + $url + 'product/edit/' + data + '" data-modal-name="largeModal"><i class="ti-pencil-alt"></i> แก้ไข</button>' +
-                        '<button class="btn btn-outline-danger btn-sm btn-delete" data-name="' + row.username + '" data-href="' + $url + 'product/delete/' + data + '"><i class="ti-trash"></i> ลบข้อมูล</button>' +
+                        '<button class="btn btn-outline-danger btn-sm btn-delete" data-name="' + row.name + '" data-href="' + $url + 'product/delete/' + data + '"><i class="ti-trash"></i> ลบข้อมูล</button>' +
                         '</div>';
                 },
             },

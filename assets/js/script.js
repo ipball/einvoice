@@ -102,8 +102,12 @@ function deleteConf(url, name, callback = '') {
         confirmButtonText: 'Yes'
     }).then((result) => {
         if (result.value) {
-            axios.get(url).then((response) => {
-                callback();
+            axios.get(url).then((response) => {                
+                if(response.data){
+                    callback();
+                } else {
+                    showBox('มีข้อมูลที่ถูกใช้งานอยู่ ไม่สามารถลบข้อมูลได้', 'error');
+                }
             });
         }
     }).catch(swal.noop);
