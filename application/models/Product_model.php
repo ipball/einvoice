@@ -26,7 +26,7 @@ class Product_model extends MY_Model
             'sell_price' => null,
             'type' => null,
             'quantity' => null,
-            'status' => null,
+            'status' => true,
             'categorie_id' => null
         );
         return $data;
