@@ -10,24 +10,22 @@ function get_department($default = "เลือกแผนก")
     return array_column($results, 'name', 'id');
 }
 
-function get_employee_type($default = "เลือกประเภทพนักงาน")
-{
-    // 1=Full-time, 2=Part-time, 3=Temporary, 4=Outsource        
+function get_product_type($default = "เลือกประเภทสินค้า")
+{    
     $results = array(
         '' => $default,
-        '1' => 'พนักงานประจำ',
-        '2' => 'พนักงาน Part-time',
-        '3' => 'พนักงานชั่วคราว',
-        '4' => 'Outsource'
+        '1' => 'สินค้านับสต็อก',
+        '2' => 'สินค้าไม่นับสต็อก',
+        '3' => 'สินค้าบริการ'        
     );
     return $results;
 }
 
-function get_leave_type($default = "เลือกประเภท")
+function get_categorie($default = "เลือกประเภท")
 {        
     $CI = &get_instance();
-    $CI->load->model('Leavetype_model');
-    $results = $CI->Leavetype_model->get_all_active();
+    $CI->load->model('Categorie_model');
+    $results = $CI->Categorie_model->get_all_active();
     array_unshift($results, array('id' => '', 'name' => $default));
     return array_column($results, 'name', 'id');
 }

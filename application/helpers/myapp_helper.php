@@ -201,7 +201,7 @@ function get_type_text($type_id)
 
 function get_img($profile_picture, $size, $default = null)
 {
-    $img = empty($default) ? 'assets/img/person-avatar.jpg' : $default;
+    $img = empty($default) ? 'assets/img/image.jpg' : $default;
     $result = !empty($profile_picture) ? base_url('uploads/img/'.fullimage($profile_picture, $size, 'show')) : base_url($img);
     return $result;
 }

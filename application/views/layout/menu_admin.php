@@ -16,16 +16,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <a href="<?=base_url('invoice')?>"><i class="sidebar-item-icon ti-files"></i>
                     <span class="nav-label">ใบแจ้งหนี้ (Invoice)</span>
                 </a>
-            </li>
+            </li>            
             <li class="heading">ข้อมูลหลัก</li>
+            <li>            
+                <a href="<?=base_url('product')?>"><i class="sidebar-item-icon ti-layers-alt"></i>
+                    <span class="nav-label">สินค้า</span>
+                </a>
+            </li>
             <li>
                 <a href="<?=base_url('employee')?>"><i class="sidebar-item-icon ti-id-badge"></i>
                     <span class="nav-label">ลูกค้า</span>
                 </a>
+            </li>
+            <li>
                 <a href="<?=base_url('setting')?>"><i class="sidebar-item-icon ti-settings"></i>
                     <span class="nav-label">ตั้งค่าระบบ</span>
                 </a>
-            </li>
+            </li>   
         </ul>
     </div>
 </nav>
