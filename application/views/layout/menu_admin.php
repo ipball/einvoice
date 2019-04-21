@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </a>
             </li>
             <li>
-                <a href="<?=base_url('employee')?>"><i class="sidebar-item-icon ti-id-badge"></i>
+                <a href="<?=base_url('contact')?>"><i class="sidebar-item-icon ti-id-badge"></i>
                     <span class="nav-label">ลูกค้า</span>
                 </a>
             </li>

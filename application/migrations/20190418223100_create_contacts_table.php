@@ -17,7 +17,6 @@ class Migration_Create_contacts_table extends CI_Migration
             'code' => array(
                 'type' => 'varchar',
                 'constraint' => '50',
-                'null' => true,
             ),
             'tax_no' => array(
                 'type' => 'varchar',
