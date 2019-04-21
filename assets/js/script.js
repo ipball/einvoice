@@ -34,7 +34,7 @@ Vue.component('select2', {
 });
 
 Vue.filter('numberFormat', function (value) {
-    if (!value) return ''
+    if (!value) return '0.00';
     return numeral(value).format('0,0.00');
   })
 

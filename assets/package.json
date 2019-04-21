@@ -26,7 +26,6 @@
     "select2": "^4.0.6-rc.1",
     "sweetalert2": "^7.28.11",
     "vue": "^2.6.10",
-    "vue-datepicker-local": "^1.0.19",
-    "vue-select": "^3.0.2"
+    "vue-datepicker-local": "^1.0.19"
   }
 }

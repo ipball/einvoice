@@ -16,7 +16,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>ลูกค้า</label>
-                                <v-select :options="options" v-model="document.contact_id"></v-select>
+                                <select2 :options="contacts" v-model="document.contact_id"></select2>
                             </div>
                         </div>
                         <div class="col-sm-8">
@@ -69,7 +69,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 border-left">
                             <div class="row">
                                 <div class="col-sm-4 form-group">
                                     <label>วันที่เอกสาร</label>
@@ -80,20 +80,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <vue-datepicker-local v-model="document.due_date" :local="dateEn" clearable format="DD/MM/YYYY"></vue-datepicker-local>
                                 </div>
                                 <div class="col-sm-4 form-group">
-                                    <label>การชำระ</label>
-                                    <v-select :options="payment_types" v-model="document.payment_type" label="name"></v-select>
+                                    <label>การชำระ</label>                                    
+                                    <select2 :options="payment_types" v-model="document.payment_type"></select2>
                                 </div>
-                                <div class="col-sm-3 form-group">
+                                <div class="col-sm-4 form-group">
                                     <label>เอกสารอ้างอิง</label>
                                     <input class="form-control" v-model="document.ref_doc">
                                 </div>
-                                <div class="col-sm-3 form-group">
+                                <div class="col-sm-4 form-group">
                                     <label>เครดิต (วัน)</label>
-                                    <input class="form-control" v-model="document.credit_date">
+                                    <input class="form-control" v-model="document.credit_day">
                                 </div>
-                                <div class="col-sm-6 form-group">
-                                    <label>การคิดภาษี</label>
-                                    <v-select :options="vat_types" v-model="document.vat_type" label="name"></v-select>
+                                <div class="col-sm-4 form-group">
+                                    <label>การคิดภาษี</label>                                    
+                                    <select2 :options="vat_types" v-model="document.vat_type"></select2>
                                 </div>
                             </div>
                         </div>
@@ -101,11 +101,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <hr />
                     <div class="row">
                         <div class="col-sm-4 mb-3">
-                            <select2 :options="products" v-model="product">                                
-                            </select2>
-                        </div>
-                        <div class="col-sm-8">
-                            <button type="button" class="btn btn-warning" @click="addProduct"><i class="ti-plus"></i> เพิ่มสินค้า</button>
+                            <select2 :options="products" v-model="product"></select2>
                         </div>
                         <div class="col-sm-12">
                             <table class="table">
@@ -114,9 +110,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <th scope="col" style="width: 60px;">#</th>
                                         <th scope="col" style="width: 300px;">รหัส (SKU)</th>
                                         <th scope="col">สินค้า</th>
-                                        <th scope="col" style="width: 100px;">จำนวน</th>
-                                        <th scope="col" style="width: 100px;">ราคา/หน่วย</th>
-                                        <th scope="col" style="width: 100px;">รวมเป็นเงิน</th>
+                                        <th scope="col" class="text-center" style="width: 100px;">จำนวน</th>
+                                        <th scope="col" style="width: 100px;" class="text-right">ราคา/หน่วย</th>
+                                        <th scope="col" style="width: 100px;" class="text-right">รวมเป็นเงิน</th>
                                         <th scope="col" style="width: 60px;" class="text-center">&nbsp;</th>
                                     </tr>
                                 </thead>
@@ -126,9 +122,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td>{{ index+1 }}</td>
                                             <td>{{ product.sku }}</td>
                                             <td>{{ product.name }}</td>
-                                            <td><input class="form-control form-control-sm" type="number" v-model="product.amount"></td>
-                                            <td>{{ product.sell_price | numberFormat }}</td>
-                                            <td>{{ (product.sell_price*product.amount) | numberFormat }}</td>
+                                            <td><input class="form-control form-control-sm text-right" type="number" v-model="product.amount"></td>
+                                            <td class="text-right">{{ product.sell_price | numberFormat }}</td>
+                                            <td class="text-right">{{ (product.sell_price*product.amount) | numberFormat }}</td>
                                             <td><button type="button" class="btn btn-sm btn-danger btn-circle" @click="removeProduct(index)"><i class="fa fa-times"></i></button></td>
                                         </tr>
                                     </template>
@@ -140,7 +136,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </tbody>
                             </table>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="float-right d-flex justify-content-between">
+                                <table class="table" style="width: 350px;">
+                                    <tr>
+                                        <th>รวม</th>
+                                        <td class="text-right">{{ total | numberFormat }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>ส่วนลด</th>
+                                        <td><input class="form-control form-control-sm text-right" type="number" v-model="document.discount"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>จำนวนเงินหลังหักส่วนลด</th>
+                                        <td class="text-right">{{ totalAfterDiscount | numberFormat }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>ภาษีมูลค่าเพิ่ม 7%</th>
+                                        <td class="text-right">{{ vat | numberFormat }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>รวมทั้งสิ้น</th>
+                                        <td class="text-right">99999</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+                    {{ document.contacts }}
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" @click="onSave">บันทึก</button>
                         <a href="<?=base_url('invoice')?>" class="btn btn-danger" role="button">ยกเลิก</a>

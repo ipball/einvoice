@@ -36,7 +36,7 @@ class Migration_Create_documents_table extends CI_Migration
                 'constraint' => 11,
                 'comment' => '1=เงินสด, 2=เงินเชื่อ, 3=เงินโอน ,4=เช็ค ,5=บัตรเครดิต',
             ),
-            'credit_date' => array(
+            'credit_day' => array(
                 'type' => 'int',
                 'constraint' => 11,
                 'comment' => 'เครดิต(วัน)',

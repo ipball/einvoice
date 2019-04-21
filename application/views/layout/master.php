@@ -14,8 +14,7 @@ $sess = $this->session->userdata(app_session());
     <link href="<?=base_url()?>assets/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="<?=base_url()?>assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="<?=base_url()?>assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
-    <!-- PLUGINS STYLES-->
-    <link href="<?=base_url()?>assets/node_modules/vue-select/dist/vue-select.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->    
     <link href="<?=base_url()?>assets/node_modules/vue-datepicker-local/dist/vue-datepicker-local.css" rel="stylesheet" />
     <link href="<?=base_url()?>assets/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
     <link href="<?=base_url()?>assets/node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
@@ -119,8 +118,7 @@ $sess = $this->session->userdata(app_session());
     <?php endif;  ?>
 
     <!-- CORE PLUGINS-->
-    <script src="<?=base_url()?>assets/node_modules/vue/dist/vue.min.js" type="text/javascript"></script>
-    <script src="<?=base_url()?>assets/node_modules/vue-select/dist/vue-select.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>assets/node_modules/vue/dist/vue.min.js" type="text/javascript"></script>    
     <script src="<?=base_url()?>assets/node_modules/vue-datepicker-local/dist/vue-datepicker-local.js" type="text/javascript"></script>
     <script src="<?=base_url()?>assets/node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <script src="<?=base_url()?>assets/node_modules/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>

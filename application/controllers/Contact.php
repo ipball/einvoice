@@ -96,5 +96,11 @@ class Contact extends CI_Controller {
         } else {
             echo 'true';
         }
+	}
+	
+	public function get_all()
+    {
+        $data = $this->Contact_model->get_all_active();
+        json_output($data);
     }
 }

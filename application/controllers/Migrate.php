@@ -92,6 +92,14 @@ class Migrate extends CI_Controller
         );
         $this->Setting_model->save($setting);
 
+        // vat section
+        $setting = array(
+            'id' => 9,
+            'name' => 'vat',
+            'value' => '7',
+        );
+        $this->Setting_model->save($setting);
+
         echo 'seeder success.';
     }
 }
