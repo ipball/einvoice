@@ -101,33 +101,35 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <hr />
                     <div class="row">
                         <div class="col-sm-4 mb-3">
-                            <select2 :options="products" v-model="product">
-                                <option value="0">เลือกสินค้าไว้ในรายการ</option>
+                            <select2 :options="products" v-model="product">                                
                             </select2>
+                        </div>
+                        <div class="col-sm-8">
+                            <button type="button" class="btn btn-warning" @click="addProduct"><i class="ti-plus"></i> เพิ่มสินค้า</button>
                         </div>
                         <div class="col-sm-12">
                             <table class="table">
                                 <thead>
                                     <tr class="table-secondary">
-                                        <th scope="col">#</th>
-                                        <th scope="col">รหัส (SKU)</th>
+                                        <th scope="col" style="width: 60px;">#</th>
+                                        <th scope="col" style="width: 300px;">รหัส (SKU)</th>
                                         <th scope="col">สินค้า</th>
-                                        <th scope="col">จำนวน</th>
-                                        <th scope="col">ราคาต่อหน่วย</th>
-                                        <th scope="col">รวมเป็นเงิน</th>
-                                        <th scope="col">&nbsp;</th>
+                                        <th scope="col" style="width: 100px;">จำนวน</th>
+                                        <th scope="col" style="width: 100px;">ราคา/หน่วย</th>
+                                        <th scope="col" style="width: 100px;">รวมเป็นเงิน</th>
+                                        <th scope="col" style="width: 60px;" class="text-center">&nbsp;</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <template v-if="document.products > 0">
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                    <template v-if="document.products.length > 0">
+                                        <tr v-for="(product, index) in document.products">
+                                            <td>{{ index+1 }}</td>
+                                            <td>{{ product.sku }}</td>
+                                            <td>{{ product.name }}</td>
+                                            <td><input class="form-control form-control-sm" type="number" v-model="product.amount"></td>
+                                            <td>{{ product.sell_price | numberFormat }}</td>
+                                            <td>{{ (product.sell_price*product.amount) | numberFormat }}</td>
+                                            <td><button type="button" class="btn btn-sm btn-danger btn-circle" @click="removeProduct(index)"><i class="fa fa-times"></i></button></td>
                                         </tr>
                                     </template>
                                     <template v-else>
@@ -139,7 +141,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </table>
                         </div>
                     </div>
-                    {{ document }}
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" @click="onSave">บันทึก</button>
                         <a href="<?=base_url('invoice')?>" class="btn btn-danger" role="button">ยกเลิก</a>

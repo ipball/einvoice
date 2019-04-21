@@ -34,7 +34,7 @@ class Migration_Create_documents_table extends CI_Migration
             'payment_type' => array(
                 'type' => 'int',
                 'constraint' => 11,
-                'comment' => '1=เงินสด, 2=เช็ค',
+                'comment' => '1=เงินสด, 2=เงินเชื่อ, 3=เงินโอน ,4=เช็ค ,5=บัตรเครดิต',
             ),
             'credit_date' => array(
                 'type' => 'int',

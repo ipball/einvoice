@@ -33,6 +33,11 @@ Vue.component('select2', {
     }
 });
 
+Vue.filter('numberFormat', function (value) {
+    if (!value) return ''
+    return numeral(value).format('0,0.00');
+  })
+
 // Var global vue
 var dateEn = {
     dow: 0, // Sunday is the first day of the week
