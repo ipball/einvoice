@@ -261,3 +261,8 @@ function get_status_badge($status_id)
     }
     return $result;
 }
+
+function get_now()
+{
+    return date('Y-m-d H:i:s');
+}

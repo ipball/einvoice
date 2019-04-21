@@ -18,6 +18,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </a>
             </li>            
             <li class="heading">ข้อมูลหลัก</li>
+            <li>
+                <a href="<?=base_url('categorie')?>"><i class="sidebar-item-icon ti-folder"></i>
+                    <span class="nav-label">หมวดหมู่สินค้า</span>
+                </a>
+            </li>
             <li>            
                 <a href="<?=base_url('product')?>"><i class="sidebar-item-icon ti-layers-alt"></i>
                     <span class="nav-label">สินค้า</span>
