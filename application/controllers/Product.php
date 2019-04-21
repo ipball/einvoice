@@ -46,7 +46,7 @@ class Product extends CI_Controller {
     public function edit($id){
 		$data['result'] = $this->Product_model->get_by_id($id);
 		$data['result']['image_url'] = get_img($data['result']['profile_picture'], '_sm');
-		$data['title'] = $data['result']['username'];
+		$data['title'] = $data['result']['name'];
         $data['categories'] = get_categorie();
         $data['types'] = get_product_type();
 		$this->load->view('product/product_form', $data);
