@@ -79,12 +79,14 @@ class Product extends CI_Controller {
 			$row = $this->Product_model->data();
 		}
 
+		$now = get_now();
+
 		$row['id'] = !empty($data['id']) ? $data['id'] : null;
 		$row['sku'] = $data['sku'];
         $row['barcode'] = $data['barcode'];
         $row['name'] = $data['name'];
 		$row['unit'] = $data['unit'];
-		$row['updated_at'] = date('Y-m-d H:i:s');
+		$row['updated_at'] = $now;
 		$row['detail'] = $data['detail'];
 		$row['buy_price'] = $data['buy_price'];
 		$row['sell_price'] = $data['sell_price'];
@@ -95,7 +97,7 @@ class Product extends CI_Controller {
 		$row['status'] = isset($data['status']) ? $data['status'] : 0;
 
 		if(empty($data['id'])){
-			$row['created_at'] = date('Y-m-d H:i:s');
+			$row['created_at'] = $now;
 			$this->Product_model->save($row);
 		}else{
 			$this->Product_model->update($row);
