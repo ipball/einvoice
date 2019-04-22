@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="ibox-head">
                 <div class="ibox-title">สร้างใบแจ้งหนี้ (Invoice)</div>
                 <div class="ibox-tools">
-                    <h5 class="font-extra-bold text-success">{{ document.doc_no }}</h5>
+                    <h5 class="font-extra-bold text-success">{{ document.doc_no ? document.doc_no : 'NEW INVOICE' }}</h5>
                 </div>
             </div>
             <div class="ibox-body">
@@ -25,7 +25,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <span class="badge badge-default m-r-5 m-b-5" style="font-size: 16px;">รอดำเนินการ</span>
                                 </div>
                                 <div class="border-left pl-2 ml-2">
-                                    <span class="text-info font-bold" style="font-size: 18px;">THB 0.00</span><br/>
+                                    <span class="text-info font-bold" style="font-size: 18px;">THB {{ document.grand_total | numberFormat }}</span><br/>
                                     <span class="text-muted">จำนวนเงินรวม</span>
                                 </div>
                             </div>
@@ -147,7 +147,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <th>ส่วนลด</th>
                                         <td><input class="form-control form-control-sm text-right" type="number" v-model="document.discount"></td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="document.discount > 0">
                                         <th>จำนวนเงินหลังหักส่วนลด</th>
                                         <td class="text-right">{{ totalAfterDiscount | numberFormat }}</td>
                                     </tr>
@@ -155,15 +155,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <th>ภาษีมูลค่าเพิ่ม 7%</th>
                                         <td class="text-right">{{ vat | numberFormat }}</td>
                                     </tr>
+                                    <tr v-if="document.vat_type == 2">
+                                        <th>ราคาไม่รวมภาษี</th>
+                                        <td class="text-right">{{ document.total_after_vat | numberFormat }}</td>
+                                    </tr>
                                     <tr>
-                                        <th>รวมทั้งสิ้น</th>
-                                        <td class="text-right">99999</td>
+                                        <th>จำนวนเงินรวมทั้งหมด</th>
+                                        <td class="text-right">{{ grandTotal | numberFormat }}</td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    {{ document.contacts }}
+                    </div>                    
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" @click="onSave">บันทึก</button>
                         <a href="<?=base_url('invoice')?>" class="btn btn-danger" role="button">ยกเลิก</a>
@@ -176,5 +179,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <style>
  .select2-container{
     width: 100%!important;
+}
+.datepicker {
+    z-index: auto;
 }
 </style>

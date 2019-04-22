@@ -9,7 +9,7 @@ $(function () {
         lengthChange: false,
         searching: false,
         ajax: {
-            url: $url + 'invoice/datatables_invoice',
+            url: $url + 'invoice/datatables',
             data: function (d) {
                 searchData.status = $('select[name=status]').val();
                 searchData.is_employee = $('input[name=is_employee]').val();

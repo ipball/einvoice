@@ -2,7 +2,8 @@ var app = new Vue({
     el: '#app',
     data: {
         document: {
-            doc_no: 'INV19040001',
+            id: null,
+            doc_no: null,
             contact_id: null,
             contact_address: null,
             contact_tax_no: null,
@@ -21,6 +22,7 @@ var app = new Vue({
             products: [],
             discount: 0,
             total: 0,
+            total_after_vat: 0,
             grand_total: 0,
             type: 1,
             status: 1,
@@ -34,9 +36,9 @@ var app = new Vue({
             { id: 5, text: 'บัตรเครดิต' },
         ],
         vat_types: [
-            { id: 1, text: 'None Vat' },
+            { id: 1, text: 'Excluding Vat' },
             { id: 2, text: 'Including Vat' },
-            { id: 3, text: 'Excluding Vat' }
+            { id: 3, text: 'None Vat' }
         ],
         product: '',
         products: [],
@@ -45,7 +47,32 @@ var app = new Vue({
     },
     methods: {
         onSave: function () {
-            console.log(this.document);
+            if (this.document.products.length == 0) {
+                showBox('ไม่มีรายการสินค้า กรุณาระบุ!', 'error');
+                return false;
+            } else if (this.document.contact_id == '' || this.document.contact_id == null) {
+                showBox('ยังไม่ได้เลือกลูกค้า กรุณาระบุ!', 'error');
+                return false;
+            } else if (this.document.doc_date == '' || this.document.doc_date == null) {
+                showBox('ยังไม่ได้ระบุวันที่เอกสาร กรุณาระบุ!', 'error');
+                return false;
+            } else if (this.document.due_date == '' || this.document.due_date == null) {
+                showBox('ยังไม่ได้ระบุวันที่ครบกำหนด กรุณาระบุ!', 'error');
+                return false;
+            }
+
+            axios.post($url+'invoice/save', this.document)
+                .then((response) => {
+                    if (response.status === 200) {                       
+                        showBox('บันทึกข้อมูลสำเร็จ', 'success');
+                        this.document.id = response.data.id
+                        this.document.doc_no = response.data.doc_no;
+                    } else {
+                        showBox('Status not 200', 'error');
+                    }
+                }).catch((error) => {
+                    showBox('เกิดข้อผิดพลาด', 'error');
+                });
         },
         removeProduct: function (index) {
             this.document.products.splice(index, 1);
@@ -68,7 +95,7 @@ var app = new Vue({
         axios.get(urlContacts).then((res) => {
             this.contacts = res.data.map(function (item) {
                 let obj = Object.assign({}, item);
-                obj.text = item.code + ' - ' +item.name;
+                obj.text = item.code + ' - ' + item.name;
                 return obj;
             });
             this.contacts.splice(0, 0, { id: '', text: 'เลือกลูกค้า' });
@@ -78,9 +105,10 @@ var app = new Vue({
         product: function (val) {
             if (val == '') return false;
             index = this.products.findIndex(o => o.id === val);
-            this.document.products.push(this.products[index]);
+            let product = JSON.parse(JSON.stringify(this.products[index]));
+            this.document.products.push(product);
         },
-        contactIdChange: function(val){
+        contactIdChange: function (val) {
             if (val == '') return false;
             index = this.contacts.findIndex(o => o.id === val);
             this.document.contact_tax_no = this.contacts[index].tax_no;
@@ -102,15 +130,40 @@ var app = new Vue({
             this.document.total = result;
             return result;
         },
-        totalAfterDiscount: function() {
+        totalAfterDiscount: function () {
             let result = this.document.total - this.document.discount;
             return result;
         },
-        vat: function() {
+        vat: function () {
             let result = 0;
+            let vatCal = 7; // #hardcode  - change here
+            let total = this.document.total - this.document.discount;
+
+            if (this.document.vat_type == 1) {
+                result = total * (vatCal / 100);
+            } else if (this.document.vat_type == 2) {
+                let vat = 100 / (100 + vatCal);
+                this.document.total_after_vat = (total * vat).toFixed(2);
+                result = total - this.document.total_after_vat;
+            }
+
+            this.document.vat = result;
+
             return result;
         },
-        contactIdChange: function() {
+        grandTotal: function () {
+            total = this.document.total - this.document.discount;
+            let result = total;
+
+            if (this.document.vat_type == 1) {
+                result = total + this.document.vat;
+            }
+
+            this.document.grand_total = result;
+
+            return result;
+        },
+        contactIdChange: function () {
             return this.document.contact_id;
         }
     }

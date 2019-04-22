@@ -1,11 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-class Invoice_model extends MY_Model
+class Document_model extends MY_Model
 {
     public function __construct()
     {
         parent::__construct();
-        $this->_table = 'invoices';
+        $this->_table = 'documents';
         $this->delete_db = false;
         $this->delete_tbref = array();
     }
@@ -14,31 +14,34 @@ class Invoice_model extends MY_Model
     {
         $data = array(
             'id' => null,
-            'type' => null,
-            'start_date' => null,
-            'end_date' => null,
+            'doc_no' => null,
+            'doc_date' => null,
+            'due_date' => null,
+            'ref_doc' => null,
+            'payment_type' => null,
+            'credit_day' => null,
+            'contact_name' => null,
+            'contact_address' => null,
+            'contact_email' => null,
+            'contact_tel' => null,
+            'contact_fax' => null,
+            'contact_tax_no' => null,
+            'contact_branch_name' => null,
+            'remark' => null,
+            'vat_type' => null,
+            'vat' => 0,
+            'discount' => 0,
             'total' => 0,
-            'reason' => null,
-            'address' => null,
-            'tel' => null,
-            'temple_name' => null,
-            'temple_address' => null,
-            'temple_tel' => null,
-            'wife_name' => null,
-            'spawn_date' => null,
-            'summons' => null,
-            'summons_address' => null,
-            'summons_date' => null,
-            'summons_reason' => null,
-            'summons_place' => null,
-            'reference_file' => null,
-            'status' => 1,
-            'status_detail' => null,
+            'grand_total' => 0,
+            'type' => null,            
+            'updated_at' => null,
+            'updated_by' => null,
+            'balance' => 0,
+            'pay_total' => 0,
+            'status' => null,
             'created_at' => null,
-            'status_at' => null,
-            'employee_id' => null,
-            'leave_type_id' => null,
-            'user_id' => null,
+            'created_by' => null,
+            'contact_id' => null,
         );
         return $data;
     }
@@ -121,14 +124,14 @@ class Invoice_model extends MY_Model
     }
 
     public function get_summary($param = array())
-    {        
+    {
         $condition = !empty($param['status']) ? "l.status='{$param['status']}'" : "l.status='2'";
 
         $this->db->select('e.id, e.firstname, e.lastname, l.start_date, l.end_date, l.total, month(l.start_date) as start_month, month(l.end_date) as end_month')
             ->from('leaves l')
             ->join('employees e', 'l.employee_id=e.id', 'inner')
             ->where($condition)
-            ->order_by('e.firstname', 'asc');        
+            ->order_by('e.firstname', 'asc');
 
         $query = $this->db->get();
         return $query->result_array();

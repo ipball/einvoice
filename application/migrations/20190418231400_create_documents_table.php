@@ -97,7 +97,7 @@ class Migration_Create_documents_table extends CI_Migration
             'vat_type' => array(
                 'type' => 'int',
                 'constraint' => 11,
-                'comment' => '1=novat, 2=include, 3=exclude',
+                'comment' => '1=exclude, 2=include, 3=novat',
             ),
             'vat' => array(
                 'type' => 'decimal',
