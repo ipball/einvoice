@@ -60,8 +60,8 @@ $(function () {
             {
                 targets: 2,                
                 render: function (data, type, row) {
-                    var buy_price = '<span class="text-black-50 small-text"><strong>ราคาซื้อ</strong> ' + row.buy_price + '</span>';
-                    var sell_price = '<br/><span class="text-black-50 small-text"><strong>ราคาขาย</strong> ' + row.sell_price + '</span>';
+                    var buy_price = '<span class="text-black-50 small-text"><strong>ราคาซื้อ</strong> ' + numeral(row.buy_price).format('0,0.00') + '</span>';
+                    var sell_price = '<br/><span class="text-black-50 small-text"><strong>ราคาขาย</strong> ' + numeral(row.sell_price).format('0,0.00') + '</span>';
                     return buy_price + sell_price;
                 },
             },
@@ -79,6 +79,12 @@ $(function () {
                     }
 
                     return result;
+                },
+            },
+            {
+                targets: 5,                
+                render: function (data, type, row) {
+                    return numeral(data).format('0,0.00');
                 },
             },
             {
