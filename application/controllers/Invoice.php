@@ -19,6 +19,12 @@ class Invoice extends CI_Controller
         template('invoice/index', $data, array('title' => 'รายการใบแจ้งหนี้ (Invoice)', 'script' => 'invoice.js'));
     }
 
+    public function get_by_id($id)
+    {
+        $data = $this->Document_model->get_by_id($id);
+        json_output($data);
+    }
+
     public function create()
     {
         $data['result'] = $this->Document_model->data();
@@ -152,19 +158,10 @@ class Invoice extends CI_Controller
         $param['keyword'] = trim($this->input->get('keyword'));
         $param['column'] = $this->input->get("columns[{$order_index}][data]");
         $param['dir'] = $this->input->get('order[0][dir]');
-        $param['department_id'] = $this->input->get('department_id');
-        $param['leave_type_id'] = $this->input->get('leave_type_id');
         $param['status'] = $this->input->get('status');
-        $param['start_date'] = !empty($this->input->get('start_date')) ? $this->input->get('start_date') : date('Y-m-01');
-        $param['end_date'] = !empty($this->input->get('end_date')) ? $this->input->get('end_date') : date('Y-m-t');
-        $param['is_employee'] = $this->input->get('is_employee');
-        $param['employee_id'] = $this->sess['id'];
+        $param['start_doc_date'] = !empty($this->input->get('start_doc_date')) ? $this->input->get('start_doc_date') : date('Y-m-01');
+        $param['end_doc_date'] = !empty($this->input->get('end_doc_date')) ? $this->input->get('end_doc_date') : date('Y-m-t');
         $results = $this->Document_model->get_with_page($param);
-
-        foreach ($results['data'] as &$value) {
-            $value['own_action'] = $this->sess['id'] == $value['employee_id'] ? true : false;
-            $value['role'] = strtoupper($this->sess['role']);
-        }
 
         $data['draw'] = $param['draw'];
         $data['recordsTotal'] = $results['count'];

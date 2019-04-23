@@ -49,19 +49,14 @@ class Document_model extends MY_Model
     public function get_with_page($param)
     {
         $keyword = $param['keyword'];
-        $this->db->select('l.*, e.firstname, e.lastname, d.name as department_name, t.name as leave_type_name');
+        $this->db->select('d.*, c.name');
 
-        $condition = "l.start_date between '{$param['start_date']}' and '{$param['end_date']}'";
-        $condition .= !empty($keyword) ? " and (e.firstname like '%{$keyword}%' or e.lastname like '%{$keyword}%' or e.code like '%{$keyword}%' or e.email like '%{$keyword}%')" : "";
-        $condition .= !empty($param['department_id']) ? " and d.id='{$param['department_id']}'" : "";
-        $condition .= !empty($param['leave_type_id']) ? " and l.leave_type_id='{$param['leave_type_id']}'" : "";
-        $condition .= !empty($param['status']) ? " and l.status='{$param['status']}'" : "";
-        $condition .= !empty($param['is_employee']) ? " and l.employee_id='{$param['employee_id']}'" : "";
+        $condition = "d.doc_date between '{$param['start_doc_date']}' and '{$param['end_doc_date']}'";
+        $condition .= !empty($keyword) ? " and (d.doc_no like '%{$keyword}%')" : "";        
+        $condition .= !empty($param['status']) ? " and d.status='{$param['status']}'" : "";        
 
-        $this->db->from('leaves l');
-        $this->db->join('employees e', 'l.employee_id=e.id', 'inner');
-        $this->db->join('departments d', 'e.department_id=d.id', 'inner');
-        $this->db->join('leave_types t', 't.id=l.leave_type_id', 'inner');
+        $this->db->from('documents d');
+        $this->db->join('contacts c', 'd.contact_id=c.id', 'inner');
         $this->db->where($condition);
         $this->db->limit($param['page_size'], $param['start']);
         $this->db->order_by($param['column'], $param['dir']);
@@ -69,10 +64,8 @@ class Document_model extends MY_Model
         $query = $this->db->get();
         $data = ($query->num_rows() > 0) ? $query->result_array() : [];
 
-        $count_condition = $this->db->from('leaves l')
-            ->join('employees e', 'l.employee_id=e.id', 'inner')
-            ->join('departments d', 'e.department_id=d.id', 'inner')
-            ->join('leave_types t', 't.id=l.leave_type_id', 'inner')
+        $count_condition = $this->db->from('documents d')
+            ->join('contacts c', 'd.contact_id=c.id', 'inner')
             ->where($condition)
             ->count_all_results();
         $count = $this->db->from($this->_table)->count_all_results();
@@ -82,12 +75,10 @@ class Document_model extends MY_Model
 
     public function get_by_id($id)
     {
-        $query = $this->db->select('l.*, t.name as leave_type_name, e.firstname, e.lastname, e.profile_picture, e.nickname, e.code, e.tel, e.position, d.name as department_name')
-            ->from('leaves l')
-            ->join('leave_types t', 'l.leave_type_id=t.id', 'inner')
-            ->join('employees e', 'l.employee_id=e.id', 'inner')
-            ->join('departments d', 'e.department_id=d.id', 'left')
-            ->where('l.id', $id)
+        $query = $this->db->select('h.*, d.id as detail_id, d.product_name, d.quantity, d.price, d.product_id')
+            ->from('documents h')
+            ->join('document_details d', 'h.id=d.document_id', 'inner')
+            ->where('h.id', $id)
             ->get();
         return $query->row_array();
     }

@@ -12,7 +12,6 @@ $(function () {
             url: $url + 'invoice/datatables',
             data: function (d) {
                 searchData.status = $('select[name=status]').val();
-                searchData.is_employee = $('input[name=is_employee]').val();
                 return $.extend(d, searchData);
             }
         },
@@ -20,26 +19,23 @@ $(function () {
             [4, 'desc']
         ],
         columns: [{
-                data: 'firstname'
+                data: 'doc_no'
             },
             {
-                data: 'department_name'
+                data: 'name'
             },
             {
-                data: 'invoice_type_name'
+                data: 'doc_date'
             },
             {
-                data: 'type'
+                data: 'grand_total'
             },
             {
-                data: 'start_date'
+                data: 'due_date'
             },
             {
-                data: 'total'
-            },
-            {
-                data: 'reference_file'
-            },
+                data: 'pay_total'
+            },            
             {
                 data: 'status'
             },
@@ -47,43 +43,21 @@ $(function () {
                 data: 'id'
             }
         ],
-        columnDefs: [{
-                targets: 3,
-                render: function (data, type, row) {
-                    var result;
-                    if (data == 1) {
-                        result = '<span class="badge badge-success badge-pill m-r-5 m-b-5">ลาเต็มวัน</span>';
-                    } else if (data == 2) {
-                        result = '<span class="badge badge-default badge-pill m-r-5 m-b-5">ลาครึ่งวัน เช้า</span>';
-                    } else if (data == 3) {
-                        result = '<span class="badge badge-default badge-pill m-r-5 m-b-5">ลาครึ่งวัน บ่าย</span>';
-                    }
-
-                    return result;
-                },
-            },
+        columnDefs: [
             {
-                targets: 4,
+                targets: [2, 4],
                 render: function (data, type, row) {
                     return data ? moment(data, 'YYYY-MM-DD').format('DD/MM/YYYY') : '';
                 },
             },
             {
-                targets: [5, 6],
-                orderable: false
-            },
+                targets: [3, 5],                
+                render: function(data, type, row) {
+                    return numeral(data).format('0,0.00');
+                }
+            },            
             {
                 targets: 6,
-                render: function (data, type, row) {
-                    var result = null;
-                    if (data) {
-                        result = '<a href="' + $url + 'uploads/file/' + data + '" target="_blank" class="btn btn-xs btn-rounded btn-outline-info"><i class="ti-write"></i> เปิดดู</a>';
-                    }
-                    return result;
-                },
-            },
-            {
-                targets: 7,
                 orderable: false,
                 render: function (data, type, row) {
                     var result;
@@ -101,21 +75,14 @@ $(function () {
                 },
             },
             {
-                targets: 8,
+                targets: 7,
                 orderable: false,
                 render: function (data, type, row) {
-                    var result;
-                    if(row.role == 'ADMINISTRATOR') {
-                        result = (row.status==1) ? '<button class="btn btn-outline-warning btn-sm btn-modal" data-href="' + $url + 'invoice/approval/' + data + '" data-modal-name="largeModal"><i class="ti-pencil-alt"></i> การอนุมัติ</button>' : '';
-                    } else {
-                        result = (row.own_action && row.status==1) ? '<div class="btn-group m-b-10">' +
-                        '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '" target="_blank"><i class="ti-printer"></i> พิมพ์</a> ' +
-                        '<button class="btn btn-outline-warning btn-sm btn-modal" data-href="' + $url + 'invoice/edit/' + data + '" data-modal-name="largeModal"><i class="ti-pencil-alt"></i> แก้ไข</button>' +
-                        '<button class="btn btn-outline-danger btn-sm btn-delete" data-name="' + row.firstname + '" data-href="' + $url + 'invoice/delete/' + data + '"><i class="ti-trash"></i> ยกเลิกการลา</button>' +
-                        '</div>'
-                        : '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '" target="_blank"><i class="ti-printer"></i> พิมพ์</a>';
-                    }                    
-                    return result;
+                    return '<div class="btn-group m-b-10">' +
+                        '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '" target="_blank" role="button"><i class="ti-printer"></i> พิมพ์</a> ' +
+                        '<button class="btn btn-outline-warning btn-sm btn-modal btn-edit" data-href="' + $url + 'invoice/edit/' + data + '" type="button"><i class="ti-pencil-alt"></i> แก้ไข</button>' +
+                        '<button class="btn btn-outline-danger btn-sm btn-delete" data-name="' + row.doc_no + '" data-href="' + $url + 'invoice/delete/' + data + '" type="button"><i class="ti-trash"></i> ลบเอกสาร</button>' +
+                        '</div>';                                        
                 },
             },
         ]
@@ -140,7 +107,7 @@ $(function () {
                 return false;
             },
             rules: {
-                start_date: {
+                doc_date: {
                     required: true,
                 },
                 tel: {
@@ -205,32 +172,15 @@ $(function () {
         var name = $(this).attr('data-name');
         deleteConf(url, name, delCallback);
     });
-    
-    // approve or reject function status
-    var setStatus = function(title,status) {
-        swal({
-            title: title,            
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#5c6bc0',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then(function(result){
-            if (result.value) {
-                var id = $('input[name=id]').val();
-                axios.post($url+'invoice/set_status', {id:id, status: status}).then(function(){
-                    $('.modal-form').modal('hide');
-                    table.ajax.reload();
-                });
-            }
-        }).catch(swal.noop);
-    };
+
+    $('body').on('click', '.btn-edit', function (e) {
+        e.preventDefault();        
+
+        var url = $(this).attr('data-href');
+        window.location.href = url;
+    });
 
     // trigger search event
-    $('body').on('changed.bs.select', 'select[name=department_id]', function (e, clickedIndex, isSelected, previousValue) {
-        searchData.department_id = $('select[name=department_id]').val();
-        table.ajax.reload();
-    });
 
     $('body').on('changed.bs.select', 'select[name=status]', function (e, clickedIndex, isSelected, previousValue) {
         searchData.status = $('select[name=status]').val();
@@ -256,8 +206,8 @@ $(function () {
         "opens": "left"
     }, function (start, end, label) {
         $('.date-range').find('.ca-label').html(label);
-        searchData.start_date = start.format('YYYY-MM-DD');
-        searchData.end_date = end.format('YYYY-MM-DD');
+        searchData.start_doc_date = start.format('YYYY-MM-DD');
+        searchData.end_doc_date = end.format('YYYY-MM-DD');
         table.ajax.reload();
     });
 });

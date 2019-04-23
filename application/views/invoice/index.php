@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="leaveTable" class="table table-hover dataTable no-footer dtr-inline">
+                        <table id="invoiceTable" class="table table-hover dataTable no-footer dtr-inline">
                             <thead class="thead-light thead-lg">
                                 <tr>
                                     <th>เลขที่ใบแจ้งหนี้</th>
