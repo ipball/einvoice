@@ -33,7 +33,7 @@ class Document_model extends MY_Model
             'discount' => 0,
             'total' => 0,
             'grand_total' => 0,
-            'type' => null,            
+            'type' => null,
             'updated_at' => null,
             'updated_by' => null,
             'balance' => 0,
@@ -52,8 +52,8 @@ class Document_model extends MY_Model
         $this->db->select('d.*, c.name');
 
         $condition = "d.doc_date between '{$param['start_doc_date']}' and '{$param['end_doc_date']}'";
-        $condition .= !empty($keyword) ? " and (d.doc_no like '%{$keyword}%')" : "";        
-        $condition .= !empty($param['status']) ? " and d.status='{$param['status']}'" : "";        
+        $condition .= !empty($keyword) ? " and (d.doc_no like '%{$keyword}%')" : "";
+        $condition .= !empty($param['status']) ? " and d.status='{$param['status']}'" : "";
 
         $this->db->from('documents d');
         $this->db->join('contacts c', 'd.contact_id=c.id', 'inner');
@@ -73,48 +73,12 @@ class Document_model extends MY_Model
         return $result;
     }
 
-    public function employee_leave($param)
+    public function get_by_id($id)
     {
-        $query = $this->db->select('ifnull(sum(l.total), 0) as total')
-            ->from('leaves l')
-            ->join('employees e', 'l.employee_id=e.id', 'inner')
-            ->where('e.id', $param['employee_id'])
-            ->where('l.status', $param['status'])
-            ->where_in('leave_type_id', array(1, 3, 10))
-            ->get();
+        $query = $this->db->select('d.*, c.code as contact_code, c.name as company_name')
+        ->from('documents d')
+        ->join('contacts c', 'd.contact_id=c.id', 'inner')
+        ->get();
         return $query->row_array();
-    }
-
-    public function get_all_with_param($param = array())
-    {
-
-        $this->db->select('l.*, e.firstname, e.lastname, d.name as department_name, t.name as leave_type_name, e.profile_picture')
-            ->from('leaves l')
-            ->join('employees e', 'l.employee_id=e.id', 'inner')
-            ->join('departments d', 'e.department_id=d.id', 'inner')
-            ->join('leave_types t', 't.id=l.leave_type_id', 'inner')
-            ->limit(10, 0)
-            ->order_by('l.created_at', 'desc');
-
-        if (!empty($param['employee_id'])) {
-            $this->db->where('l.employee_id', $param['employee_id']);
-        }
-
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
-    public function get_summary($param = array())
-    {
-        $condition = !empty($param['status']) ? "l.status='{$param['status']}'" : "l.status='2'";
-
-        $this->db->select('e.id, e.firstname, e.lastname, l.start_date, l.end_date, l.total, month(l.start_date) as start_month, month(l.end_date) as end_month')
-            ->from('leaves l')
-            ->join('employees e', 'l.employee_id=e.id', 'inner')
-            ->where($condition)
-            ->order_by('e.firstname', 'asc');
-
-        $query = $this->db->get();
-        return $query->result_array();
     }
 }

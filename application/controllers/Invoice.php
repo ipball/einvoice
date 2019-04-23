@@ -20,7 +20,7 @@ class Invoice extends CI_Controller
     }
 
     public function get_by_id($id)
-    {        
+    {
         $document = $this->Document_model->get_by_id($id);
         $detail = $this->Documentdetail_model->get_by_document($id);
         $document['total_after_vat'] = 0;
@@ -95,7 +95,7 @@ class Invoice extends CI_Controller
         $row['updated_by'] = $this->sess['id'];
         $row['contact_id'] = $data['contact_id'];
 
-        if (empty($data['id'])) {            
+        if (empty($data['id'])) {
             $row['created_at'] = $now;
             $row['created_by'] = $this->sess['id'];
             $this->Document_model->save($row);
@@ -173,18 +173,31 @@ class Invoice extends CI_Controller
     }
 
     public function pdf($id)
-    {        
-        $data['invoice'] = json_decode($this->get_by_id($id), true);
+    {
+        $this->load->library('Bahttext');
+        $this->load->model('Setting_model');
+
+        // get document
+        $data['document'] = $this->Document_model->get_by_id($id);
+        $detail = $this->Documentdetail_model->get_by_document($id);
+        $data['document']['products'] = $detail;
 
         $pdf = new TCPDF('A4', 'mm', 'P', true, 'UTF-8', false);
-        $pdf->SetTitle('ใบกำกับภาษี/ใบเสร็จรับเงิน');
+        $pdf->SetTitle($data['document']['doc_no']);
 
-        /* ตั้งค่าระยะห่างของขอบกระดาษ */
+        // get setting
+        $settings = $this->Setting_model->get_all();
+        foreach ($settings as $setting) {
+            $data['company'][$setting['name']] = $setting['value'];
+        }
+
+        $baht = new Bahttext();
+        $data['grand_total_text'] = $baht->convert($data['document']['grand_total']);
+
         // $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-        /* ลบการตั้งค่า Header / footer */
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
 
@@ -195,9 +208,25 @@ class Invoice extends CI_Controller
 
         $pdf->SetFont('thsarabun', '', 13, '', true);
 
-        $html = $this->load->view('leave/pdf', $data, true);
-        $pdf->AddPage();
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output('filename.pdf', 'I');
+        // perpage of document
+        $per_page = 15;
+        $count_detail = count($detail);
+        $count = ceil($count_detail / $per_page);
+        for ($i = 0; $i < $count; $i++) {
+            $data['curr_page'] = $i+1;
+            $data['count'] = $count;
+            $data['start_page'] = $i * $per_page;
+            $data['last_page'] = ($count_detail < ($data['start_page'] + $per_page)) ? $count_detail : ($data['start_page'] + $per_page);
+            
+            $html = $this->load->view('invoice/pdf', $data, true);
+            $pdf->AddPage();
+            $pdf->writeHTML($html, true, false, true, false, '');
+            
+            $footer = $this->load->view('invoice/pdf_footer', array(), true);
+            $y = $pdf->getPageHeight() - 70;
+            $pdf->writeHTMLCell(0, 0, '', $y, $footer, 0, 0, 0, true, 'J', true);
+        }
+        
+        $pdf->Output("{$data['document']['doc_no']}.pdf", "I");
     }
 }
