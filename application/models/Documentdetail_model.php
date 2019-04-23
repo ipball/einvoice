@@ -35,8 +35,10 @@ class Documentdetail_model extends MY_Model
 
     public function get_by_document($id)
     {
-        $query = $this->db->from($this->_table)
-            ->where('document_id', $id)
+        $query = $this->db->select('p.sku, p.id, d.product_name as name, d.quantity as amount, d.price as sell_price, d.cost_price as buy_price, d.unit')
+            ->from($this->_table . ' d')
+            ->join('products p', 'd.product_id=p.id', 'inner')
+            ->where('d.document_id', $id)
             ->get();
         return $query->result_array();
     }

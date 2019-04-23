@@ -131,7 +131,7 @@ class Migration_Create_documents_table extends CI_Migration
             'status' => array(
                 'type' => 'int',
                 'constraint' => 11,                
-                'comment' => '1=รอดำเนินการ, 2=รอเก็บเงิน, 3=เก็บเงินแล้ว',
+                'comment' => '1=รอดำเนินการ, 2=รอเก็บเงิน, 3=เก็บเงินยังไม่ครบ, 4=เก็บเงินครบแล้ว, 5=void',
             ),
             'contact_id' => array(
                 'type' => 'int',

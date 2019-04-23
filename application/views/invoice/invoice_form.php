@@ -19,10 +19,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <select2 :options="contacts" v-model="document.contact_id"></select2>
                             </div>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>สถานะ</label>
+                                <select2 :options="allstatus" v-model="document.status"></select2>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group" v-if="document.status == 3 || document.status == 4">
+                                <label>จำนวนเงิน</label>
+                                <input type="number" class="form-control" v-model="document.pay_total">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
                             <div class="float-right d-flex justify-content-between">
                                 <div>
-                                    <span class="badge badge-default m-r-5 m-b-5" style="font-size: 16px;">รอดำเนินการ</span>
+                                    <span class="badge badge-default m-r-5 m-b-5" style="font-size: 16px;">{{ statusText }}</span>
                                 </div>
                                 <div class="border-left pl-2 ml-2">
                                     <span class="text-info font-bold" style="font-size: 18px;">THB {{ document.grand_total | numberFormat }}</span><br/>
@@ -169,6 +181,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>                    
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" @click="onSave">บันทึก</button>
+                        <a :href="$url+'invoice/pdf/'+document.id" class="btn btn-warning" role="button" target="_blank" v-if="document.id"><i class="ti-printer"></i> พิมพ์</a>
                         <a href="<?=base_url('invoice')?>" class="btn btn-danger" role="button">ยกเลิก</a>
                     </div>
                 </form>

@@ -73,16 +73,6 @@ class Document_model extends MY_Model
         return $result;
     }
 
-    public function get_by_id($id)
-    {
-        $query = $this->db->select('h.*, d.id as detail_id, d.product_name, d.quantity, d.price, d.product_id')
-            ->from('documents h')
-            ->join('document_details d', 'h.id=d.document_id', 'inner')
-            ->where('h.id', $id)
-            ->get();
-        return $query->row_array();
-    }
-
     public function employee_leave($param)
     {
         $query = $this->db->select('ifnull(sum(l.total), 0) as total')

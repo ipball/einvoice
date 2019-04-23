@@ -53,6 +53,11 @@ var dateEn = {
 };
 
 // function javascript
+function getValFromUrl() {
+    var url = window.location.href;
+    return /[^/]*$/.exec(url)[0];
+}
+
 function validHighlight(element) {
     $(element).parents('.form-group').addClass('has-error').removeClass('has-success');
 }

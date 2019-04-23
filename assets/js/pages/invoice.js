@@ -62,13 +62,15 @@ $(function () {
                 render: function (data, type, row) {
                     var result;
                     if (data == 1) {
-                        result = '<span class="badge badge-info badge-pill m-r-5 m-b-5">รออนุมัติ</span>';
+                        result = '<span class="badge badge-default badge-pill m-r-5 m-b-5">รอดำเนินการ</span>';
                     } else if (data == 2) {
-                        result = '<span class="badge badge-success badge-pill m-r-5 m-b-5">อนุมัติแล้ว</span>';
+                        result = '<span class="badge badge-info badge-pill m-r-5 m-b-5">รอเก็บเงิน</span>';
                     } else if (data == 3) {
-                        result = '<span class="badge badge-danger badge-pill m-r-5 m-b-5">ไม่อนุมัติ</span>';
+                        result = '<span class="badge badge-warning badge-pill m-r-5 m-b-5">เก็บเงินยังไม่ครบ</span>';
                     } else if (data == 4) {
-                        result = '<span class="badge badge-default badge-pill m-r-5 m-b-5">ยกเลิก</span>';
+                        result = '<span class="badge badge-success badge-pill m-r-5 m-b-5">เก็บเงินครบ</span>';
+                    } else if (data == 5) {
+                        result = '<span class="badge badge-danger badge-pill m-r-5 m-b-5">ยกเลิกเอกสาร</span>';
                     }
 
                     return result;

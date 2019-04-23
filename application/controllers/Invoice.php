@@ -20,37 +20,38 @@ class Invoice extends CI_Controller
     }
 
     public function get_by_id($id)
-    {
-        $data = $this->Document_model->get_by_id($id);
-        json_output($data);
+    {        
+        $document = $this->Document_model->get_by_id($id);
+        $detail = $this->Documentdetail_model->get_by_document($id);
+        $document['total_after_vat'] = 0;
+        $document['products'] = $detail;
+        json_output($document);
     }
 
     public function create()
     {
-        $data['result'] = $this->Document_model->data();
-        template('invoice/invoice_form', $data, array('title' => 'สร้างใบแจ้งหนี้ (Invoice)', 'script' => 'invoice-vue.js'));
+        template('invoice/invoice_form', array(), array('title' => 'สร้างใบแจ้งหนี้ (Invoice)', 'script' => 'invoice-vue.js'));
     }
 
-    public function edit($id)
+    public function edit()
     {
-        $employee = $this->Employee_model->get_by_id($this->sess['id']);
-        $leave_par['employee_id'] = $this->sess['id'];
-        $leave_par['status'] = 2;
-        $sum_leave = $this->Document_model->employee_leave($leave_par);
-        $data['remain_leave'] = $employee['leave_of_year'] - (!empty($sum_leave['total']) ? $sum_leave['total'] : 0);
-
-        $data['result'] = $this->Document_model->get_by_id($id);
-
-        template('invoice/index', $data, array('title' => 'แก้ไขใบแจ้งหนี้ (Invoice)', 'script' => 'invoice.js'));
+        template('invoice/invoice_form', array(), array('title' => 'แก้ไขใบแจ้งหนี้ (Invoice)', 'script' => 'invoice-vue.js'));
     }
 
     public function delete($id)
     {
-        $result = $this->Document_model->get_by_id($id);
-        if (!empty($result['reference_file'])) {
-            @unlink(FCPATH . 'uploads/file/' . $result['reference_file']);
+        $this->db->trans_start();
+        $details = $this->Documentdetail_model->get_by_document($id);
+        foreach ($details as $detail) {
+            $product = $this->Product_model->get_by_id($detail['id']);
+            if ($product['type'] == 1) {
+                $this->Product_model->set_quantity($detail['id'], $detail['amount']);
+            }
         }
+
+        $this->Documentdetail_model->delete_by_document($id);
         $data = $this->Document_model->delete($id);
+        $this->db->trans_complete();
         json_output($data);
     }
 
@@ -86,28 +87,29 @@ class Invoice extends CI_Controller
         $row['discount'] = $data['discount'];
         $row['total'] = $data['total'];
         $row['grand_total'] = $data['grand_total'];
+        $row['pay_total'] = $data['pay_total'];
+        $row['balance'] = $row['grand_total'] - $row['pay_total'];
         $row['type'] = 1;
         $row['status'] = $data['status'];
         $row['updated_at'] = $now;
         $row['updated_by'] = $this->sess['id'];
         $row['contact_id'] = $data['contact_id'];
 
-        if (empty($data['id'])) {
-            $row['balance'] = 0;
-            $row['pay_total'] = 0;
+        if (empty($data['id'])) {            
             $row['created_at'] = $now;
             $row['created_by'] = $this->sess['id'];
             $this->Document_model->save($row);
 
             $row['id'] = $this->db->insert_id();
+            set_running($prefix);
         } else {
             $this->Document_model->update($row);
 
             $details = $this->Documentdetail_model->get_by_document($row['id']);
             foreach ($details as $detail) {
-                $product = $this->Product_model->get_by_id($detail['product_id']);
+                $product = $this->Product_model->get_by_id($detail['id']);
                 if ($product['type'] == 1) {
-                    $this->Product_model->set_quantity($detail['product_id'], $detail['quantity']);
+                    $this->Product_model->set_quantity($detail['id'], $detail['amount']);
                 }
             }
 
@@ -137,8 +139,6 @@ class Invoice extends CI_Controller
                 $this->Product_model->set_quantity($product['id'], $quantity);
             }
         }
-
-        set_running($prefix);
 
         $this->db->trans_complete();
 

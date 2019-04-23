@@ -24,6 +24,7 @@ var app = new Vue({
             total: 0,
             total_after_vat: 0,
             grand_total: 0,
+            pay_total: 0,
             type: 1,
             status: 1,
             remark: null
@@ -43,6 +44,14 @@ var app = new Vue({
         product: '',
         products: [],
         contacts: [],
+        allstatus: [
+            { id: 1, text: 'รอดำเนินการ' },
+            { id: 2, text: 'รอเก็บเงิน' },
+            { id: 3, text: 'เก็บเงินยังไม่ครบ' },
+            { id: 4, text: 'เก็บเงินครบแล้ว' },
+            { id: 5, text: 'เอกสารถูกยกเลิก' }
+        ],
+        statusText: null,
         dateEn: dateEn
     },
     methods: {
@@ -61,9 +70,9 @@ var app = new Vue({
                 return false;
             }
 
-            axios.post($url+'invoice/save', this.document)
+            axios.post($url + 'invoice/save', this.document)
                 .then((response) => {
-                    if (response.status === 200) {                       
+                    if (response.status === 200) {
                         showBox('บันทึกข้อมูลสำเร็จ', 'success');
                         this.document.id = response.data.id
                         this.document.doc_no = response.data.doc_no;
@@ -79,8 +88,9 @@ var app = new Vue({
         }
     },
     created() {
-        var urlProducts = $url + 'product/get_all';
-        var urlContacts = $url + 'contact/get_all';
+        let urlProducts = $url + 'product/get_all';
+        let urlContacts = $url + 'contact/get_all';
+        let documentId = parseInt(getValFromUrl());
 
         axios.get(urlProducts).then((res) => {
             this.products = res.data.map(function (item) {
@@ -99,6 +109,12 @@ var app = new Vue({
                 return obj;
             });
             this.contacts.splice(0, 0, { id: '', text: 'เลือกลูกค้า' });
+        }).then(() => {
+            if (Number.isInteger(documentId)) {
+                axios.get($url + 'invoice/get_by_id/' + documentId).then((res) => {
+                    this.document = res.data;
+                });
+            }
         });
     },
     watch: {
@@ -119,6 +135,11 @@ var app = new Vue({
             this.document.contact_tel = this.contacts[index].tel;
             this.document.contact_fax = this.contacts[index].fax;
             this.document.credit_day = this.contacts[index].credit_day;
+        },
+        statusChange: function(val) {            
+            if (val == '') return false;
+            index = this.allstatus.findIndex(o => o.id == val);            
+            this.statusText = this.allstatus[index].text;
         }
     },
     computed: {
@@ -165,6 +186,9 @@ var app = new Vue({
         },
         contactIdChange: function () {
             return this.document.contact_id;
+        },
+        statusChange: function () {
+            return this.document.status;
         }
     }
 });
