@@ -1,15 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-function get_department($default = "เลือกแผนก")
-{
-    $CI = &get_instance();
-    $CI->load->model('Department_model');
-    $results = $CI->Department_model->get_all_active();
-    array_unshift($results, array('id' => '', 'name' => $default));
-    return array_column($results, 'name', 'id');
-}
-
 function get_product_type($default = "เลือกประเภทสินค้า")
 {    
     $results = array(
@@ -35,9 +26,12 @@ function get_status($default = "เลือกสถานะ")
     // 1=Full-time, 2=Part-time, 3=Temporary, 4=Outsource        
     $results = array(
         '' => $default,
-        '1' => 'รอตรวจสอบ',
-        '2' => 'อนุมัติ',
-        '3' => 'ไม่อนุมัติ'
+        '1' => 'รอดำเนินการ',
+        '2' => 'รอเก็บเงิน',
+        '3' => 'เก็บเงินยังไม่ครบ',
+        '4' => 'เก็บเงินครบ',
+        '5' => 'เอกสารถูกยกเลิก',
+
     );
     return $results;
 }

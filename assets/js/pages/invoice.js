@@ -70,7 +70,7 @@ $(function () {
                     } else if (data == 4) {
                         result = '<span class="badge badge-success badge-pill m-r-5 m-b-5">เก็บเงินครบ</span>';
                     } else if (data == 5) {
-                        result = '<span class="badge badge-danger badge-pill m-r-5 m-b-5">ยกเลิกเอกสาร</span>';
+                        result = '<span class="badge badge-danger badge-pill m-r-5 m-b-5">เอกสารถูกยกเลิก</span>';
                     }
 
                     return result;

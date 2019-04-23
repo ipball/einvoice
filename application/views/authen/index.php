@@ -8,7 +8,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width initial-scale=1.0">
-    <title>ระบบลางานออนไลน์ | Login</title>
+    <title>ระบบพิมพ์ใบกำกับภาษี, ใบเสร็จรับเงิน | Login</title>
     <!-- GLOBAL MAINLY STYLES-->
     <link href="<?=base_url()?>assets/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="<?=base_url()?>assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -23,7 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <body class="bg-silver-300">
     <div class="content">
         <div class="brand">
-            <a class="link" href="<?=base_url('authen')?>">Leave System</a>
+            <a class="link" href="<?=base_url('authen')?>">eInvoice System</a>
         </div>
         <form id="login-form" action="<?=base_url('authen/check_user')?>" method="post">
             <h2 class="login-title">Log in</h2>

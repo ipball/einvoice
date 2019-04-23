@@ -38,10 +38,10 @@ $sess = $this->session->userdata(app_session());
         <header class="header">
             <div class="page-brand">
                 <a class="link" href="<?=base_url()?>">
-                    <span class="brand">Leave
-                        <span class="brand-tip">Manage</span>
+                    <span class="brand">e
+                        <span class="brand-tip">Invoice</span>
                     </span>
-                    <span class="brand-mini">LM</span>
+                    <span class="brand-mini">eINV</span>
                 </a>
             </div>
             <div class="flexbox flex-1">

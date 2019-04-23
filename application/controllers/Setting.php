@@ -12,16 +12,16 @@ class Setting extends CI_Controller {
 
 	public function index()
 	{	
-		$data['company_name'] = $this->Setting_model->get_by_name('company_name');
-		$data['address'] = $this->Setting_model->get_by_name('address');
-		$data['news'] = $this->Setting_model->get_by_name('news');
-		$data['logo'] = $this->Setting_model->get_by_name('logo');
-		template('setting/index', $data, array('title'=>'ตั้งค่า | ระบบลางานออนไลน์', 'script' => 'setting.js'));
+        $settings = $this->Setting_model->get_all();
+        foreach ($settings as $setting) {
+            $data[$setting['name']] = $setting['value'];
+        }
+		template('setting/index', $data, array('title'=>'ตั้งค่า', 'script' => 'setting.js'));
 	}
 
 	public function save()
 	{
-		$cols = array('company_name', 'address', 'logo', 'news');
+		$cols = array('company_name', 'address', 'tax_no', 'branch', 'tel', 'fax', 'website', 'logo','vat');
 		foreach($cols as $key => $col) {
 			$id = $key+1;
 			$row['id'] = $id;

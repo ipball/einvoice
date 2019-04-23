@@ -7,7 +7,7 @@ class User_model extends MY_Model
         parent::__construct();
         $this->_table = 'users';
         $this->delete_db = true;
-        $this->delete_tbref = array('leaves');
+        $this->delete_tbref = array('documents');
     }
 
     public function data()

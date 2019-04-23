@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 function template($content, $data = array(), $value = array())
 {
     $CI = &get_instance();
-    $temp['title'] = !empty($value['title']) ? $value['title'] : 'ระบบลางานออนไลน์';
+    $temp['title'] = !empty($value['title']) ? $value['title'] : 'ระบบพิมพ์ใบกำกับภาษี|ใบเสร็จรับเงิน';
     $temp['script'] = !empty($value['script']) ? $value['script'] : null;
     $temp['content'] = $CI->load->view($content, $data, true);
     $CI->load->view('layout/master', $temp);
@@ -18,7 +18,7 @@ function json_output($value)
 
 function app_session()
 {
-    return 'leaveSyS';
+    return 'documentSyS';
 }
 
 
@@ -190,86 +190,11 @@ function upload_file($file_upload = 'file_upload', $prefix = '')
     return $datafile;
 }
 
-function get_type_text($type_id)
-{
-    $result = null;
-    switch ($type_id) {
-        case 1:
-            $result = 'ลาเต็มวัน';
-            break;
-        case 2:
-            $result = 'ลาครึ่งเช้า';
-            break;
-        case 3:
-            $result = 'ลาครึ่งบ่าย';
-            break;
-        default:
-            $result = null;
-            break;
-    }
-    return $result;
-}
 
 function get_img($profile_picture, $size, $default = null)
 {
     $img = empty($default) ? 'assets/img/image.jpg' : $default;
     $result = !empty($profile_picture) ? base_url('uploads/img/'.fullimage($profile_picture, $size, 'show')) : base_url($img);
-    return $result;
-}
-
-function find_float($number)
-{
-    $result = $number;
-    $float = substr($number, strpos($number, '.')+1);
-    if($float == 0){
-        $result = number_format($number);
-    }
-    return $result;
-}
-
-function get_status_text($status_id)
-{
-    $result = null;
-    switch ($status_id) {
-        case 1:
-            $result = 'รออนุมัติ';
-            break;
-        case 2:
-            $result = 'อนุมัติแล้ว';
-            break;
-        case 3:
-            $result = 'ไม่อนุมัติ';
-            break;
-        case 4:
-            $result = 'ยกเลิก';
-            break;            
-        default:
-            $result = null;
-            break;
-    }
-    return $result;
-}
-
-function get_status_badge($status_id)
-{
-    $result = null;
-    switch ($status_id) {
-        case 1:
-            $result = 'badge-info';
-            break;
-        case 2:
-            $result = 'badge-success';
-            break;
-        case 3:
-            $result = 'badge-danger';
-            break;
-        case 4:
-            $result = 'badge-default';
-            break;            
-        default:
-            $result = null;
-            break;
-    }
     return $result;
 }
 
