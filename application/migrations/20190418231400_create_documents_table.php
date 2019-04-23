@@ -126,7 +126,7 @@ class Migration_Create_documents_table extends CI_Migration
             'type' => array(
                 'type' => 'int',
                 'constraint' => 11,
-                'comment' => '1=ใบแจ้งหนี้(invoice)',
+                'comment' => '1=การขาย(invoice)',
             ),
             'status' => array(
                 'type' => 'int',

@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="col-md-12">
         <div class="ibox">
             <div class="ibox-head">
-                <div class="ibox-title">สร้างใบแจ้งหนี้ (Invoice)</div>
+                <div class="ibox-title">สร้างการขาย (Invoice)</div>
                 <div class="ibox-tools">
                     <h5 class="font-extra-bold text-success">{{ document.doc_no ? document.doc_no : 'NEW INVOICE' }}</h5>
                 </div>

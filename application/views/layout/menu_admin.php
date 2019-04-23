@@ -14,7 +14,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <ul class="side-menu metismenu">
             <li>
                 <a href="<?=base_url('invoice')?>"><i class="sidebar-item-icon ti-files"></i>
-                    <span class="nav-label">ใบแจ้งหนี้ (Invoice)</span>
+                    <span class="nav-label">การขาย (Invoice)</span>
                 </a>
             </li>            
             <li class="heading">ข้อมูลหลัก</li>

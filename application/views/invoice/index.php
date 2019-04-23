@@ -5,9 +5,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="col-md-12">
         <div class="ibox">
             <div class="ibox-head">
-                <div class="ibox-title">รายการใบแจ้งหนี้ (Invoice)</div>
+                <div class="ibox-title">รายการขาย (Invoice)</div>
                 <div>                    
-                    <a class="btn btn-info btn-sm" href="<?=base_url('invoice/create')?>" role="button">สร้างใบแจ้งหนี้</a>
+                    <a class="btn btn-info btn-sm" href="<?=base_url('invoice/create')?>" role="button">สร้างการขาย</a>
                 </div>
             </div>
             <div class="ibox-body">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="col-sm-12">
                         <div class="form-inline float-right">
                             <?php echo form_dropdown('status', $status, null, array('class' => 'form-control selectpicker form-control-sm mr-3', 'data-width' => 'auto', 'data-style' => 'btn-default')); ?>
-                            <label class="mr-2">วันที่ใบแจ้งหนี้:</label>
+                            <label class="mr-2">วันที่เอกสาร:</label>
                             <!-- <input type="text" name="date_range" class="form-control date-range form-control-sm mr-3">       -->
                             <button class="btn btn-default btn-sm date-range mr-3"><i class="ti-calendar"></i> <span class="ca-label">This Month</span> <i class="fa fa-caret-down"></i></button>
 
@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <table id="invoiceTable" class="table table-hover dataTable no-footer dtr-inline">
                             <thead class="thead-light thead-lg">
                                 <tr>
-                                    <th>เลขที่ใบแจ้งหนี้</th>
+                                    <th>เลขที่</th>
                                     <th>ชื่อลูกค้า</th>
                                     <th>วันที่</th>  
                                     <th>ยอดรวม</th>

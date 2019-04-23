@@ -16,7 +16,7 @@ class Invoice extends CI_Controller
     {
         $data['status'] = get_status('สถานะทั้งหมด');
 
-        template('invoice/index', $data, array('title' => 'รายการใบแจ้งหนี้ (Invoice)', 'script' => 'invoice.js'));
+        template('invoice/index', $data, array('title' => 'รายการขาย (Invoice)', 'script' => 'invoice.js'));
     }
 
     public function get_by_id($id)
@@ -30,12 +30,12 @@ class Invoice extends CI_Controller
 
     public function create()
     {
-        template('invoice/invoice_form', array(), array('title' => 'สร้างใบแจ้งหนี้ (Invoice)', 'script' => 'invoice-vue.js'));
+        template('invoice/invoice_form', array(), array('title' => 'สร้างรายการขาย (Invoice)', 'script' => 'invoice-vue.js'));
     }
 
     public function edit()
     {
-        template('invoice/invoice_form', array(), array('title' => 'แก้ไขใบแจ้งหนี้ (Invoice)', 'script' => 'invoice-vue.js'));
+        template('invoice/invoice_form', array(), array('title' => 'แก้ไขรายการขาย (Invoice)', 'script' => 'invoice-vue.js'));
     }
 
     public function delete($id)
@@ -172,38 +172,12 @@ class Invoice extends CI_Controller
         json_output($data);
     }
 
-    public function uploadfile()
-    {
-        $datafile = upload_file('file_upload', 'leave');
-
-        json_output($datafile);
-    }
-
-    public function approval($id)
-    {
-        $data['result'] = $this->Document_model->get_by_id($id);
-        $data['title'] = 'อนุมัติการลา - ' . $data['result']['firstname'] . ' ' . $data['result']['lastname'];
-        $data['result']['type_name'] = get_type_text($data['result']['type']);
-        $data['result']['image_url'] = get_img($data['result']['profile_picture'], '_sm');
-        $data['result']['leave_date'] = str_date($data['result']['start_date']) . (!empty($data['result']['end_date']) ? ' - ' . str_date($data['result']['end_date']) : '');
-        $this->load->view('leave/approval_form', $data);
-    }
-
-    public function set_status()
-    {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $row['id'] = $data['id'];
-        $row['status'] = $data['status'];
-        $this->Document_model->update($row);
-        json_output($row);
-    }
-
     public function pdf($id)
-    {
-        $data['leave'] = $this->Document_model->get_by_id($id);
+    {        
+        $data['invoice'] = json_decode($this->get_by_id($id), true);
 
         $pdf = new TCPDF('A4', 'mm', 'P', true, 'UTF-8', false);
-        $pdf->SetTitle('ใบลางาน');
+        $pdf->SetTitle('ใบกำกับภาษี/ใบเสร็จรับเงิน');
 
         /* ตั้งค่าระยะห่างของขอบกระดาษ */
         // $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
