@@ -7,6 +7,8 @@ class Invoice extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Document_model');
+        $this->load->model('Documentdetail_model');
+        $this->load->model('Product_model');
         $this->sess = $this->session->userdata(app_session());
     }
 
@@ -89,21 +91,55 @@ class Invoice extends CI_Controller
             $row['pay_total'] = 0;
             $row['created_at'] = $now;
             $row['created_by'] = $this->sess['id'];
-			$this->Document_model->save($row);
-			
-			$row['id'] = $this->db->insert_id();
+            $this->Document_model->save($row);
+
+            $row['id'] = $this->db->insert_id();
         } else {
             $this->Document_model->update($row);
+
+            $details = $this->Documentdetail_model->get_by_document($row['id']);
+            foreach ($details as $detail) {
+                $product = $this->Product_model->get_by_id($detail['product_id']);
+                if ($product['type'] == 1) {
+                    $this->Product_model->set_quantity($detail['product_id'], $detail['quantity']);
+                }
+            }
+
+            $this->Documentdetail_model->delete_by_document($row['id']);
         }
 
-		set_running($prefix);
+        foreach ($data['products'] as $key => $product) {
+            $detail = $this->Documentdetail_model->data();
+            $detail_id = $key + 1;
 
-		$this->db->trans_complete();
+            $detail['id'] = $detail_id;
+            $detail['line_no'] = $detail_id;
+            $detail['product_name'] = $product['name'];
+            $detail['quantity'] = $product['amount'];
+            $detail['price'] = $product['sell_price'];
+            $detail['cost_price'] = $product['buy_price'];
+            $detail['total'] = $product['amount'] * $product['sell_price'];
+            $detail['unit'] = $product['unit'];
+            $detail['product_id'] = $product['id'];
+            $detail['document_id'] = $row['id'];
 
-		$row['status_code'] = true;
+            $this->Documentdetail_model->save($detail);
+
+            $product_detail = $this->Product_model->get_by_id($product['id']);
+            if ($product_detail['type'] == 1) {
+                $quantity = $product['amount'] * (-1);
+                $this->Product_model->set_quantity($product['id'], $quantity);
+            }
+        }
+
+        set_running($prefix);
+
+        $this->db->trans_complete();
+
+        $row['status_code'] = true;
         if ($this->db->trans_status() === false) {
             json_output(array('status_code' => false));
-        }		
+        }
         json_output($row);
     }
 

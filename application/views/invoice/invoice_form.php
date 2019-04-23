@@ -181,6 +181,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
     width: 100%!important;
 }
 .datepicker {
-    z-index: auto;
+    z-index: auto!important;
 }
 </style>

@@ -68,5 +68,12 @@ class Product_model extends MY_Model
     {
         $query = $this->db->where('sku', $sku)->get($this->_table);
         return $query->row_array();
-	}
+    }
+    
+    public function set_quantity($id, $quantity)
+    {
+        $this->db->set("quantity", "quantity+{$quantity}", FALSE);
+		$this->db->where("id", $id);
+		$this->db->update($this->_table);
+    }
 }
