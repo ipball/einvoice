@@ -133,7 +133,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <tr v-for="(product, index) in document.products">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ product.sku }}</td>
-                                            <td>{{ product.name }}</td>
+                                            <td><input type="text" class="form-control form-control-sm" v-model="product.name"></td>
                                             <td><input class="form-control form-control-sm text-right" type="number" v-model="product.amount"></td>
                                             <td class="text-right">{{ product.sell_price | numberFormat }}</td>
                                             <td class="text-right">{{ (product.sell_price*product.amount) | numberFormat }}</td>

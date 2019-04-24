@@ -78,7 +78,8 @@ class Document_model extends MY_Model
         $query = $this->db->select('d.*, c.code as contact_code, c.name as company_name')
         ->from('documents d')
         ->join('contacts c', 'd.contact_id=c.id', 'inner')
-        ->get();
+        ->where('d.id', $id)
+        ->get();        
         return $query->row_array();
     }
 }

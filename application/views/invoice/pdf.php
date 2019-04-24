@@ -52,7 +52,7 @@
 </style>
 <table class="wrap-box" cellpadding="0" cellspacing="0">
     <tr>
-        <td style="width: 60%;"><span class="header-title"><?=$company['company_name']?></span>
+        <td style="width: 60%;"><span class="header-title"><?=$company['company_name']?> (<?=$company['branch']?>)</span>
             <br /> <?=nl2br($company['address'])?>
             <br /> เลขที่ประจำตัวผู้เสียภาษี <?=$company['tax_no']?>
         </td>
@@ -113,18 +113,16 @@
     <tr>
         <td><table class="wrap-content" cellpadding="3" cellspacing="0">
             <tr>
-                <th style="width:5%;">#</th>
-                <th style="width:20%;">รหัสสินค้า</th>
-                <th style="width:35%;">รายละเอียด</th>
+                <th style="width:5%;">#</th>                
+                <th style="width:55%;">รายละเอียด</th>
                 <th style="width:13%;">จำนวน</th>
                 <th style="width:12%;">ราคา/หน่วย</th>
                 <th style="width:15%;">รวม</th>
             </tr>
             <?php for($i = $start_page; $i < $last_page; $i++): ?>
                 <tr>
-                    <td style="text-align:center;"><?php echo ($i+1); ?></td>
-                    <td><?=$document['products'][$i]['sku']?></td>
-                    <td><?=$document['products'][$i]['name']?></td>
+                    <td style="text-align:center;"><?php echo ($i+1); ?></td>                    
+                    <td><?=($document['products'][$i]['type']==1)?$document['products'][$i]['sku'].' - ' : ''?><?=$document['products'][$i]['name']?></td>
                     <td style="text-align:right;"><?php echo number_format($document['products'][$i]['amount'],2) . ' ' . $document['products'][$i]['unit']; ?></td>
                     <td style="text-align:right;"><?php echo number_format($document['products'][$i]['sell_price'],2); ?></td>
                     <td style="text-align:right;"><?php echo number_format($document['products'][$i]['amount'] * $document['products'][$i]['sell_price'],2); ?></td> 
