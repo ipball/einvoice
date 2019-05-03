@@ -81,7 +81,8 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     return '<div class="btn-group m-b-10">' +
-                        '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '" target="_blank" role="button"><i class="ti-printer"></i> พิมพ์</a> ' +
+                        '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '?source=1" target="_blank" role="button"><i class="ti-printer"></i> ต้นฉบับ</a> ' +
+                        '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '?source=2" target="_blank" role="button"><i class="ti-printer"></i> สำเนา</a> ' +
                         '<button class="btn btn-outline-warning btn-sm btn-modal btn-edit" data-href="' + $url + 'invoice/edit/' + data + '" type="button"><i class="ti-pencil-alt"></i> แก้ไข</button>' +
                         '<button class="btn btn-outline-danger btn-sm btn-delete" data-name="' + row.doc_no + '" data-href="' + $url + 'invoice/delete/' + data + '" type="button"><i class="ti-trash"></i> ลบเอกสาร</button>' +
                         '</div>';                                        

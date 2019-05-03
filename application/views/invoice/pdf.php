@@ -56,7 +56,7 @@
             <br /> <?=nl2br($company['address'])?>
             <br /> เลขที่ประจำตัวผู้เสียภาษี <?=$company['tax_no']?>
         </td>
-        <td style="text-align: right;width: 40%;"><span class="header-title">ใบกำกับภาษี/ใบเสร็จรับเงิน</span></td>
+        <td style="text-align: right;width: 40%;"><span class="header-title">ใบกำกับภาษี/ใบเสร็จรับเงิน</span><br/><?=$source?></td>
     </tr>
 </table>
 <div class="line"></div>
@@ -69,7 +69,7 @@
                 </tr>
                 <tr>
                     <td><b>ชื่อลูกค้า</b></td>
-                    <td><?=$document['company_name']?></td>
+                    <td><?=$document['company_name']?> <?=$document['contact_branch_name']?></td>
                 </tr>
                 <tr>
                     <td><b>ที่อยู่</b></td>

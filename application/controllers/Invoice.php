@@ -59,7 +59,10 @@ class Invoice extends CI_Controller
     {
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $prefix = 'INV' . date('ym');
+        $doc_date = db_datejs($data['doc_date']);
+        $frm_date = DateTime::createFromFormat('Y-m-d', $doc_date);
+
+        $prefix = 'INV' . $frm_date->format('ym');
 
         if (empty($data['id'])) {
             $row = $this->Document_model->data();
@@ -69,7 +72,7 @@ class Invoice extends CI_Controller
 
         $row['id'] = !empty($data['id']) ? $data['id'] : null;
         $row['doc_no'] = !empty($data['id']) ? $data['doc_no'] : get_running($prefix);
-        $row['doc_date'] = db_datejs($data['doc_date']);
+        $row['doc_date'] = $doc_date;
         $row['due_date'] = db_datejs($data['due_date']);
         $row['ref_doc'] = $data['ref_doc'];
         $row['payment_type'] = $data['payment_type'];
@@ -178,7 +181,9 @@ class Invoice extends CI_Controller
         $this->load->model('Setting_model');
 
         // get document
+        $data['source'] = $this->input->get('source') == 1 ? 'ต้นฉบับ' : 'สำเนา';
         $data['document'] = $this->Document_model->get_by_id($id);
+        $data['document']['contact_branch_name'] = !empty($data['document']['contact_branch_name']) ? "({$data['document']['contact_branch_name']})" : "";
         $detail = $this->Documentdetail_model->get_by_document($id);
         $data['document']['products'] = $detail;
 

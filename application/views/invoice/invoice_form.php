@@ -181,7 +181,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>                    
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" @click="onSave">บันทึก</button>
-                        <a :href="$url+'invoice/pdf/'+document.id" class="btn btn-warning" role="button" target="_blank" v-if="document.id"><i class="ti-printer"></i> พิมพ์</a>
+                        <a :href="$url+'invoice/pdf/'+document.id+'?source=1'" class="btn btn-warning" role="button" target="_blank" v-if="document.id"><i class="ti-printer"></i> ต้นฉบับ</a>
+                        <a :href="$url+'invoice/pdf/'+document.id+'?source=2'" class="btn btn-warning" role="button" target="_blank" v-if="document.id"><i class="ti-printer"></i> สำเนา</a>
                         <a href="<?=base_url('invoice')?>" class="btn btn-danger" role="button">ยกเลิก</a>
                     </div>
                 </form>
