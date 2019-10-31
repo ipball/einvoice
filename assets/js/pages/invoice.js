@@ -81,6 +81,7 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     return '<div class="btn-group m-b-10">' +
+                        '<a class="btn btn-outline-dark btn-sm" href="' + $url + 'invoice/view/' + data + '" target="_blank" role="button"><i class="ti-link"></i> ลิงค์บิล</a> ' +
                         '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '?source=1" target="_blank" role="button"><i class="ti-printer"></i> ต้นฉบับ</a> ' +
                         '<a class="btn btn-outline-info btn-sm" href="' + $url + 'invoice/pdf/' + data + '?source=2" target="_blank" role="button"><i class="ti-printer"></i> สำเนา</a> ' +
                         '<button class="btn btn-outline-warning btn-sm btn-modal btn-edit" data-href="' + $url + 'invoice/edit/' + data + '" type="button"><i class="ti-pencil-alt"></i> แก้ไข</button>' +

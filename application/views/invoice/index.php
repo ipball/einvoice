@@ -36,7 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <th>ครบกำหนด</th>
                                     <th>ยอดชำระ</th>
                                     <th>สถานะ</th>                                    
-                                    <th style="width:300px;">จัดการ</th>
+                                    <th style="width:350px;">จัดการ</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

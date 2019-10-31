@@ -52,4 +52,19 @@ table.dataTable {
     height: 30px;
 }
 
-/* fixed v-select */
+/* invoice page */
+.invoice {
+    padding: 20px
+}
+
+.invoice-header {
+    margin-bottom: 50px
+}
+
+.invoice-documentno {
+    margin-bottom: 10px;
+}
+
+.table-invoice tr td:last-child {
+    text-align: right;
+}

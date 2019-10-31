@@ -9,6 +9,8 @@ class Invoice extends CI_Controller
         $this->load->model('Document_model');
         $this->load->model('Documentdetail_model');
         $this->load->model('Product_model');
+        $this->load->model('Setting_model');
+        $this->load->library('Bahttext');
         $this->sess = $this->session->userdata(app_session());
     }
 
@@ -176,10 +178,7 @@ class Invoice extends CI_Controller
     }
 
     public function pdf($id)
-    {
-        $this->load->library('Bahttext');
-        $this->load->model('Setting_model');
-
+    {        
         // get document
         $data['source'] = $this->input->get('source') == 1 ? 'ต้นฉบับ' : 'สำเนา';
         $data['document'] = $this->Document_model->get_by_id($id);
@@ -218,20 +217,39 @@ class Invoice extends CI_Controller
         $count_detail = count($detail);
         $count = ceil($count_detail / $per_page);
         for ($i = 0; $i < $count; $i++) {
-            $data['curr_page'] = $i+1;
+            $data['curr_page'] = $i + 1;
             $data['count'] = $count;
             $data['start_page'] = $i * $per_page;
             $data['last_page'] = ($count_detail < ($data['start_page'] + $per_page)) ? $count_detail : ($data['start_page'] + $per_page);
-            
+
             $html = $this->load->view('invoice/pdf', $data, true);
             $pdf->AddPage();
             $pdf->writeHTML($html, true, false, true, false, '');
-            
+
             $footer = $this->load->view('invoice/pdf_footer', array(), true);
             $y = $pdf->getPageHeight() - 70;
             $pdf->writeHTMLCell(0, 0, '', $y, $footer, 0, 0, 0, true, 'J', true);
         }
-        
+
         $pdf->Output("{$data['document']['doc_no']}.pdf", "I");
+    }
+
+    public function view($id)
+    {
+        $data['document'] = $this->Document_model->get_by_id($id);
+        $data['document']['contact_branch_name'] = !empty($data['document']['contact_branch_name']) ? "({$data['document']['contact_branch_name']})" : "";
+
+        $data['products'] = $this->Documentdetail_model->get_by_document($id);        
+        $data['title'] = 'ใบกำกับภาษี/ใบเสร็จรับเงิน - ' . $data['document']['doc_no'];
+
+        $settings = $this->Setting_model->get_all();
+        foreach ($settings as $setting) {
+            $data['company'][$setting['name']] = $setting['value'];
+        }
+
+        $baht = new Bahttext();
+        $data['grand_total_text'] = $baht->convert($data['document']['grand_total']);
+
+        $this->load->view('invoice/invoice_view', $data);
     }
 }
