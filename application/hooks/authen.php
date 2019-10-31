@@ -10,6 +10,11 @@ class Authen
     {
         $class = $this->CI->router->fetch_class();
         $method = $this->CI->router->fetch_method();
+
+        // except page
+        $guests['class'] = array('invoice');
+        $guests['method'] = array('view');
+        if(in_array($class, $guests['class']) && in_array($method, $guests['method'])) return true;
         
         $exclude_class = array('authen', 'migrate');
 
