@@ -234,9 +234,16 @@ class Invoice extends CI_Controller
         $pdf->Output("{$data['document']['doc_no']}.pdf", "I");
     }
 
-    public function view($id)
+    public function view($code)
     {
+        $decode = base64_decode($code);
+        $exp = explode('INV', $decode);
+        $id = $exp[0];        
         $data['document'] = $this->Document_model->get_by_id($id);
+        if(empty($data['document'])){
+            show_404();
+        }
+
         $data['document']['contact_branch_name'] = !empty($data['document']['contact_branch_name']) ? "({$data['document']['contact_branch_name']})" : "";
 
         $data['products'] = $this->Documentdetail_model->get_by_document($id);        
