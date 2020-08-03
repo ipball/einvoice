@@ -203,16 +203,15 @@ function get_now()
     return date('Y-m-d H:i:s');
 }
 
-function get_running($prefix)
+function get_running($prefix, $pad = 4)
 {
     $CI = &get_instance();
     $CI->load->model('Run_model');
     $row = $CI->Run_model->get_by_id($prefix);
-    if (!empty($row)) {
-        $running = $prefix . str_pad($row['val'], 4, '0', STR_PAD_LEFT);
-    } else {
-        $running = $prefix . '0001';
-    }
+    
+    $no = !empty($row) ? $row['val'] : '1';
+    $running = $prefix . str_pad($no, $pad, '0', STR_PAD_LEFT);
+    
     return $running;
 }
 
