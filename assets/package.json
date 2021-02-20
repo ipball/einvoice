@@ -9,7 +9,7 @@
   "author": "Tawatsak",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.1.3",
     "bootstrap-datepicker": "^1.8.0",
     "bootstrap-select": "^1.13.3",
