@@ -292,7 +292,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `name`, `email`, `token`, `token_date`, `status`) VALUES
-(1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', 'Tawatsak Tangeaim', 'itoffside@hotmail.com', NULL, NULL, 1);
+(1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', 'Kanoksak Norjai', 'kanoksak@hotmail.com', NULL, NULL, 1);
 
 --
 -- Indexes for dumped tables
